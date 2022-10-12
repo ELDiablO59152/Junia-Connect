@@ -1,12 +1,12 @@
 # Junia-Connect
-Short script to authenticate against Junia firewall. Can be launch on Windows startup. It will check the correct WiFi name before authentication.
+Short script to authenticate against Junia firewall. Can be launched on Windows startup. It will check the correct WiFi name before authentication.
 
-Make sure you have intsalled requests :
+Make sure you have installed requests :
 ```
 pip install requests
 ```
 
-You can launch the script with the command for the prompt method or by giving the credentials as arguments :
+You can launch the script for the prompt method or by giving the credentials as arguments with the commands :
 ```
 python JConnect.py
 python JConnect.py mail=[mail address] password=[password] debug
