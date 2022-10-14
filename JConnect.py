@@ -22,7 +22,8 @@ def JuniaConnect():
         elif arguments.split('=')[0] == "password": password = arguments.split('=')[1]
         elif arguments == "debug": debug = True
 
-    r = requests.get('http://www.gstatic.com/generate_204')  # Get the magic number from the firewall
+    try: r = requests.get('http://www.gstatic.com/generate_204')  # Get the magic number from the firewall
+    except: print("Error while reaching internet, check your connection")
     if debug: print(r.text)
 
     if r.text != '':
@@ -36,9 +37,9 @@ def JuniaConnect():
         notconnected = True
 
         while notconnected :
-            mail = input("Mail Address: ")
+            if not mail: mail = input("Mail Address: ")
             print ("Account:", mail)
-            password = getpass()
+            if not password: password = getpass()
 
             # Authentication request
             requests.post('https://wifi-students.junia.com:1003/', data={'4Tredir': 'http://www.gstatic.com/generate_204', 'magic': magic, 'username': mail, 'password': password})
@@ -50,6 +51,8 @@ def JuniaConnect():
                 notconnected = False
                 print("Success !")
             else:
+                mail = ""
+                password = ""
                 input("Authentication failed")
 
     else: input("Error, already connected or impossible to reach firewall")
