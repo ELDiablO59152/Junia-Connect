@@ -5,22 +5,28 @@ from subprocess import check_output
 
 
 def VerifWiFi():
+    debug = False
+    for arguments in sys.argv:
+        if arguments == "debug": debug = True
+    
     SSID = check_output(["powershell", "-Command", "(get-netconnectionProfile).Name"], shell=False).strip()
-    if SSID == b'JUNIA_STUDENTS':
-        JuniaConnect()
-    else:
-        print("Wrong WiFi:", SSID.decode())
+    if b'JUNIA_STUDENTS' in SSID: JuniaConnect(debug)
+    elif debug:
+        try: SSID = SSID.decode()
+        except: pass
+        print("Wrong WiFi:", SSID)
+        input("Press Enter to exit")
+    else: print("Wrong WiFi:", SSID)
+
     return
 
 
-def JuniaConnect():
+def JuniaConnect(debug):
     mail = ""
     password = ""
-    debug = False
     for arguments in sys.argv:
         if arguments.split('=')[0] == "mail": mail = arguments.split('=')[1]
         elif arguments.split('=')[0] == "password": password = arguments.split('=')[1]
-        elif arguments == "debug": debug = True
 
     try: r = requests.get('http://www.gstatic.com/generate_204')  # Get the magic number from the firewall
     except: print("Error while reaching internet, check your connection")
@@ -55,8 +61,9 @@ def JuniaConnect():
                 password = ""
                 input("Authentication failed")
 
-    else: input("Error, already connected or impossible to reach firewall")
+    else: input("Error, already connected or impossible to reach firewall\nPress Enter to exit")
     return
 
 
+print("Junia-Connect v1.2")
 VerifWiFi()
